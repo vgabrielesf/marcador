@@ -3,13 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Modelo 3D AR - 1.fbx</title>
+    <title>Modelo 3D AR - 1.glb</title>
     
     <!-- A-Frame -->
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    
-    <!-- A-Frame Extras para FBX/GLTF -->
-    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.loaders.min.js"></script>
     
     <!-- AR.js -->
     <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.min.js"></script>
@@ -39,11 +36,12 @@
 <body>
     
     <div id="info">
-        <h3>🎮 AR Modelo 1.fbx</h3>
-        <p>Verificando arquivo: <strong>1.fbx</strong></p>
+        <h3>🎮 AR Modelo 1.glb</h3>
+        <p>Formato GLTF - Funciona perfeitamente!</p>
         <button class="success" onclick="testCamera()">📹 Testar Câmera</button>
         <button class="warning" onclick="showInstructions()">📋 Instruções</button>
         <button class="info" onclick="showMarker()">🎯 Ver Marcador</button>
+        <button onclick="showConverter()">🔄 Converter FBX</button>
     </div>
 
     <!-- Cena AR -->
@@ -54,13 +52,12 @@
         loading-screen="enabled: false;">
         
         <!-- Assets -->
-        <a-assets timeout="10000">
-            <!-- Modelo FBX Principal -->
-            <a-asset-item id="fbx-model" src="1.fbx"></a-asset-item>
+        <a-assets timeout="30000">
+            <!-- Modelo GLTF Principal -->
+            <a-asset-item id="gltf-model" src="./1.glb" crossorigin="anonymous"></a-asset-item>
             
-            <!-- Modelos alternativos (caso existam) -->
-            <a-asset-item id="gltf-model" src="1.glb"></a-asset-item>
-            <a-asset-item id="obj-model" src="1.obj"></a-asset-item>
+            <!-- Modelo de demonstração (fallback) -->
+            <a-asset-item id="demo-model" src="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b%2Fduck.gltf?1527873511517" crossorigin="anonymous"></a-asset-item>
         </a-assets>
         
         <a-marker preset='hiro' id="hiro-marker">
@@ -68,18 +65,7 @@
             <!-- Container principal do modelo -->
             <a-entity id="model-container" position="0 0 0">
                 
-                <!-- Modelo FBX (tentativa principal) -->
-                <a-entity 
-                    id="fbx-entity"
-                    fbx-model="src: #fbx-model"
-                    position="0 0 0" 
-                    rotation="0 0 0" 
-                    scale="1 1 1"
-                    animation="property: rotation; to: 0 360 0; loop: true; dur: 20000;"
-                    visible="true">
-                </a-entity>
-                
-                <!-- Modelo GLTF (backup 1) -->
+                <!-- Modelo GLTF Principal -->
                 <a-entity 
                     id="gltf-entity"
                     gltf-model="src: #gltf-model"
@@ -87,10 +73,30 @@
                     rotation="0 0 0" 
                     scale="1 1 1"
                     animation="property: rotation; to: 0 360 0; loop: true; dur: 20000;"
-                    visible="false">
+                    visible="true">
                 </a-entity>
                 
-                <!-- Cubo de fallback (backup 2) -->
+                <!-- Modelo de demonstração (fallback) -->
+                <a-entity 
+                    id="demo-entity"
+                    gltf-model="src: #demo-model"
+                    position="0 0 0" 
+                    rotation="0 0 0" 
+                    scale="0.02 0.02 0.02"
+                    animation="property: rotation; to: 0 360 0; loop: true; dur: 10000;"
+                    visible="false">
+                    
+                    <!-- Texto explicativo -->
+                    <a-text 
+                        value="CONVERTA\nSEU FBX\nPARA GLB" 
+                        position="0 30 0" 
+                        align="center" 
+                        color="#ffff00" 
+                        scale="15 15 15">
+                    </a-text>
+                </a-entity>
+                
+                <!-- Cubo de fallback (último recurso) -->
                 <a-box 
                     id="fallback-cube"
                     position="0 0.5 0" 
@@ -101,7 +107,7 @@
                     visible="false">
                     
                     <a-text 
-                        value="1.fbx\nNAO\nENCONTRADO" 
+                        value="1.glb\nNAO\nENCONTRADO" 
                         position="0 0 0.51" 
                         align="center" 
                         color="white" 
@@ -137,12 +143,12 @@
         
         function showInstructions() {
             document.getElementById('info').innerHTML = `
-                <h3>📋 Como usar seu Modelo 1.fbx:</h3>
-                <p><strong>1. Verifique o arquivo:</strong></p>
+                <h3>📋 Como usar seu Modelo 1.glb:</h3>
+                <p><strong>1. Arquivo necessário:</strong></p>
                 <ul style="text-align: left; font-size: 11px;">
-                    <li>✅ Arquivo "1.fbx" deve estar no repositório</li>
-                    <li>✅ Nome exato: <strong>1.fbx</strong> (não "modelo.fbx")</li>
-                    <li>✅ Tamanho máximo: 20MB</li>
+                    <li>✅ Arquivo "1.glb" deve estar no repositório</li>
+                    <li>✅ Nome exato: <strong>1.glb</strong> (formato GLTF)</li>
+                    <li>✅ Muito mais rápido que FBX</li>
                 </ul>
                 <p><strong>2. Como usar:</strong></p>
                 <ul style="text-align: left; font-size: 11px;">
@@ -152,7 +158,33 @@
                 </ul>
                 <button onclick="testCamera()">📹 Testar</button>
                 <button onclick="showMarker()">🎯 Marcador</button>
+                <button onclick="showConverter()">🔄 Converter FBX</button>
                 <button onclick="hideInfo()">✨ AR</button>
+            `;
+        }
+        
+        function showConverter() {
+            document.getElementById('info').innerHTML = `
+                <h3>🔄 Converter FBX → GLTF:</h3>
+                
+                <p><strong>BLENDER (Grátis):</strong></p>
+                <ol style="text-align: left; font-size: 11px;">
+                    <li>Baixe: blender.org</li>
+                    <li>File → Import → FBX (.fbx)</li>
+                    <li>Selecione seu 1.fbx</li>
+                    <li>File → Export → glTF 2.0 (.glb)</li>
+                    <li>Salve como "1.glb"</li>
+                    <li>Upload no GitHub</li>
+                </ol>
+                
+                <p><strong>ONLINE:</strong></p>
+                <ul style="text-align: left; font-size: 11px;">
+                    <li>products.aspose.app/3d/conversion</li>
+                    <li>Upload 1.fbx → Baixe 1.glb</li>
+                </ul>
+                
+                <button onclick="showInstructions()">🔙 Voltar</button>
+                <button onclick="hideInfo()">OK</button>
             `;
         }
         
@@ -199,8 +231,8 @@
         // Gerenciar carregamento dos modelos
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
-                const fbxEntity = document.querySelector('#fbx-entity');
                 const gltfEntity = document.querySelector('#gltf-entity');
+                const demoEntity = document.querySelector('#demo-entity');
                 const fallbackCube = document.querySelector('#fallback-cube');
                 const marker = document.querySelector('#hiro-marker');
                 
@@ -209,9 +241,6 @@
                     marker.addEventListener('markerFound', () => {
                         console.log('🎯 Marcador Hiro encontrado!');
                         markerFound = true;
-                        if (modelLoaded) {
-                            updateStatus('✅ Modelo carregado! Movimente o celular ao redor.');
-                        }
                     });
                     
                     marker.addEventListener('markerLost', () => {
@@ -220,77 +249,56 @@
                     });
                 }
                 
-                // Tentativa 1: FBX
-                if (fbxEntity) {
-                    fbxEntity.addEventListener('model-loaded', function() {
-                        console.log('✅ Modelo FBX 1.fbx carregado!');
+                // Tentativa principal: GLTF
+                if (gltfEntity) {
+                    gltfEntity.addEventListener('model-loaded', function() {
+                        console.log('✅ Modelo GLTF 1.glb carregado!');
                         modelLoaded = true;
-                        updateStatus('✅ Seu modelo 1.fbx foi carregado com sucesso!');
+                        updateStatus('✅ Seu modelo 1.glb foi carregado com sucesso!');
                     });
                     
-                    fbxEntity.addEventListener('model-error', function(evt) {
-                        console.log('❌ Erro no FBX, tentando GLTF...', evt);
-                        tryGLTF();
+                    gltfEntity.addEventListener('model-error', function() {
+                        console.log('❌ Erro no GLTF, usando demo...');
+                        useDemoModel();
                     });
                 }
                 
-                // Tentativa 2: GLTF
-                function tryGLTF() {
-                    if (gltfEntity) {
-                        gltfEntity.setAttribute('visible', true);
-                        fbxEntity.setAttribute('visible', false);
-                        
-                        gltfEntity.addEventListener('model-loaded', function() {
-                            console.log('✅ Modelo GLTF carregado como alternativa!');
-                            modelLoaded = true;
-                            updateStatus('✅ Modelo 1.glb carregado (alternativa ao FBX)');
-                        });
-                        
-                        gltfEntity.addEventListener('model-error', function() {
-                            console.log('❌ GLTF também falhou, usando fallback...');
-                            useFallback();
-                        });
-                    } else {
-                        useFallback();
+                // Função para usar modelo demo
+                function useDemoModel() {
+                    if (demoEntity) {
+                        demoEntity.setAttribute('visible', true);
+                        gltfEntity.setAttribute('visible', false);
+                        updateStatus('🧪 Modelo de exemplo - Converta seu FBX');
                     }
                 }
                 
-                // Tentativa 3: Fallback
-                function useFallback() {
-                    if (fallbackCube) {
-                        fallbackCube.setAttribute('visible', true);
-                        fbxEntity.setAttribute('visible', false);
-                        if (gltfEntity) gltfEntity.setAttribute('visible', false);
-                        
-                        updateStatus('⚠️ Arquivo 1.fbx não encontrado no repositório', true);
-                    }
-                }
-                
-                function updateStatus(message, isError = false) {
+                function updateStatus(message) {
                     const infoDiv = document.getElementById('info');
-                    const bgColor = isError ? 'rgba(220, 53, 69, 0.9)' : 'rgba(40, 167, 69, 0.9)';
-                    
-                    infoDiv.style.background = bgColor;
                     infoDiv.innerHTML = `
                         <h3>🎮 ${message}</h3>
-                        ${isError ? 
-                            '<p><strong>Certifique-se que o arquivo "1.fbx" está no repositório GitHub</strong></p>' : 
-                            '<p>Aponte a câmera para o marcador Hiro</p>'
-                        }
-                        <button onclick="showInstructions()">📋 Ajuda</button>
+                        <p>Aponte para o marcador Hiro</p>
+                        <button onclick="showConverter()">🔄 Converter</button>
                         <button onclick="hideInfo()">OK</button>
                     `;
                 }
                 
-                // Verificar carregamento após 8 segundos
+                // Verificar carregamento após 5 segundos
                 setTimeout(() => {
                     if (!modelLoaded) {
-                        console.log('⚠️ Timeout: nenhum modelo carregou, usando fallback...');
-                        useFallback();
+                        useDemoModel();
                     }
-                }, 8000);
+                }, 5000);
                 
             }, 1000);
+        });
+        
+        // Auto-inicializar teste da câmera
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (!cameraWorking) {
+                    testCamera();
+                }
+            }, 2000);
         });
         
         // Auto-inicializar teste da câmera
