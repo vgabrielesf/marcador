@@ -301,15 +301,6 @@
             }, 2000);
         });
         
-        // Auto-inicializar teste da câmera
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                if (!cameraWorking) {
-                    testCamera();
-                }
-            }, 2000);
-        });
-        
         // Forçar HTTPS se necessário
         if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
             console.warn('⚠️ HTTPS necessário para câmera em dispositivos móveis');
