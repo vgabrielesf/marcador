@@ -36,8 +36,8 @@
 <body>
     
     <div id="info">
-        <h3>🎮 AR Modelo 1.glb</h3>
-        <p>Carregando arquivo GLB...</p>
+        <h3>🎮 AR Modelo GitHub</h3>
+        <p>Carregando 1.glb do repositório...</p>
         <button class="success" onclick="testCamera()">📹 Testar Câmera</button>
         <button class="warning" onclick="showInstructions()">📋 Instruções</button>
         <button class="info" onclick="showMarker()">🎯 Ver Marcador</button>
@@ -53,8 +53,8 @@
         
         <!-- Assets -->
         <a-assets timeout="30000">
-            <!-- Modelo GLTF Principal -->
-            <a-asset-item id="gltf-model" src="./1.glb" crossorigin="anonymous"></a-asset-item>
+            <!-- Modelo GLTF Principal do GitHub -->
+            <a-asset-item id="gltf-model" src="https://github.com/vgabrielesf/marcador/raw/main/1.glb" crossorigin="anonymous"></a-asset-item>
             
             <!-- Modelo de demonstração (fallback) -->
             <a-asset-item id="demo-model" src="https://cdn.glitch.com/36cb8393-65c6-408d-a538-055ada20431b%2Fduck.gltf?1527873511517" crossorigin="anonymous"></a-asset-item>
@@ -276,9 +276,9 @@
                     const infoDiv = document.getElementById('info');
                     infoDiv.style.background = 'rgba(40, 167, 69, 0.95)';
                     infoDiv.innerHTML = `
-                        <h3>🎉 SEU MODELO 1.GLB CARREGADO!</h3>
-                        <p><strong>✅ Arquivo encontrado e funcionando!</strong></p>
-                        <p>Agora aponte a câmera para o marcador Hiro</p>
+                        <h3>🎉 MODELO GLB CARREGADO!</h3>
+                        <p><strong>✅ Arquivo do GitHub funcionando!</strong></p>
+                        <p>github.com/vgabrielesf/marcador/1.glb</p>
                         <button onclick="testCamera()" class="success">📹 Testar Câmera</button>
                         <button onclick="showMarker()" class="info">🎯 Ver Marcador</button>
                         <button onclick="hideInfo()" class="warning">🚀 Começar AR</button>
