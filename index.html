@@ -37,11 +37,11 @@
     
     <div id="info">
         <h3>🎮 AR Modelo 1.glb</h3>
-        <p>Formato GLTF - Funciona perfeitamente!</p>
+        <p>Carregando arquivo GLB...</p>
         <button class="success" onclick="testCamera()">📹 Testar Câmera</button>
         <button class="warning" onclick="showInstructions()">📋 Instruções</button>
         <button class="info" onclick="showMarker()">🎯 Ver Marcador</button>
-        <button onclick="showConverter()">🔄 Converter FBX</button>
+        <button onclick="hideInfo()">▶️ Iniciar AR</button>
     </div>
 
     <!-- Cena AR -->
@@ -254,7 +254,7 @@
                     gltfEntity.addEventListener('model-loaded', function() {
                         console.log('✅ Modelo GLTF 1.glb carregado!');
                         modelLoaded = true;
-                        updateStatus('✅ Seu modelo 1.glb foi carregado com sucesso!');
+                        updateSuccessStatus();
                     });
                     
                     gltfEntity.addEventListener('model-error', function() {
@@ -268,16 +268,30 @@
                     if (demoEntity) {
                         demoEntity.setAttribute('visible', true);
                         gltfEntity.setAttribute('visible', false);
-                        updateStatus('🧪 Modelo de exemplo - Converta seu FBX');
+                        updateStatus('🧪 Modelo de exemplo - Converta seu FBX para GLB');
                     }
+                }
+                
+                function updateSuccessStatus() {
+                    const infoDiv = document.getElementById('info');
+                    infoDiv.style.background = 'rgba(40, 167, 69, 0.95)';
+                    infoDiv.innerHTML = `
+                        <h3>🎉 SEU MODELO 1.GLB CARREGADO!</h3>
+                        <p><strong>✅ Arquivo encontrado e funcionando!</strong></p>
+                        <p>Agora aponte a câmera para o marcador Hiro</p>
+                        <button onclick="testCamera()" class="success">📹 Testar Câmera</button>
+                        <button onclick="showMarker()" class="info">🎯 Ver Marcador</button>
+                        <button onclick="hideInfo()" class="warning">🚀 Começar AR</button>
+                    `;
                 }
                 
                 function updateStatus(message) {
                     const infoDiv = document.getElementById('info');
+                    infoDiv.style.background = 'rgba(255, 193, 7, 0.95)';
                     infoDiv.innerHTML = `
-                        <h3>🎮 ${message}</h3>
-                        <p>Aponte para o marcador Hiro</p>
-                        <button onclick="showConverter()">🔄 Converter</button>
+                        <h3>⚠️ ${message}</h3>
+                        <p>Arquivo 1.glb não encontrado no diretório</p>
+                        <button onclick="showConverter()">🔄 Como Converter</button>
                         <button onclick="hideInfo()">OK</button>
                     `;
                 }
